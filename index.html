@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BERITA JKT48</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffd700 0%, #ff69b4 25%, #87ceeb 50%, #ffa500 75%, #ff1493 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .badge-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff0000, #ffff00);
+        }
+
+        .badge-text {
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #9966ff, #ff69b4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .title-berita {
+            background: linear-gradient(135deg, #9966ff, #ff1493);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+        }
+
+        .title-jkt48 {
+            background: linear-gradient(135deg, #0099ff, #00ff99);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #9966ff, transparent);
+        }
+
+        .divider-icon {
+            font-size: 1.5rem;
+        }
+
+        .button-text {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .subscribe-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            max-width: 500px;
+            padding: 18px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #ff3333, #ff6699, #ffaa00);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 51, 51, 0.3);
+        }
+
+        .subscribe-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 51, 51, 0.5);
+        }
+
+        .subscribe-btn:active {
+            transform: scale(0.95);
+        }
+
+        .youtube-icon {
+            width: 24px;
+            height: 24px;
+            display: inline-block;
+        }
+
+        .footer-text {
+            margin-top: 40px;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .container {
+                padding: 30px 20px;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="badge">
+            <span class="badge-dot"></span>
+            <span class="badge-text">JKT48</span>
+            <span class="badge-dot"></span>
+        </div>
+
+        <h1>
+            <span class="title-berita">BERITA</span><br>
+            <span class="title-jkt48">JKT48</span>
+        </h1>
+
+        <p class="subtitle">Ikuti semua berita terbaru dan update eksklusif dari JKT48</p>
+
+        <div class="divider">
+            <div class="divider-line"></div>
+            <span class="divider-icon">✨</span>
+            <div class="divider-line"></div>
+        </div>
+
+        <p class="button-text">Subscribe ke channel YouTube kami untuk konten terbaru</p>
+
+        <a href="https://www.youtube.com/@beritajeketi48" target="_blank" class="subscribe-btn">
+            <svg class="youtube-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+            SUBSCRIBE YOUTUBE
+        </a>
+
+        <p class="footer-text">Jangan lewatkan update berita JKT48 terbaru!</p>
+    </div>
+</body>
+</html>
