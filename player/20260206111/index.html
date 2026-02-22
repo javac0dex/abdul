@@ -986,6 +986,15 @@
       }
       return minutes + ':' + String(secs).padStart(2, '0');
     }
+    function applyQuality() {
+  if (!player) return;
+
+  if (currentQuality === 'auto') {
+    player.setPlaybackQuality('default');
+  } else {
+    player.setPlaybackQuality(currentQuality);
+  }
+}
 
     // Load YouTube API
     var tag = document.createElement('script');
@@ -1019,21 +1028,22 @@
     };
 
     function onPlayerReady(event) {
-      loadingEl.classList.add('hidden');
-      duration = player.getDuration();
-      durationEl.textContent = formatTime(duration);
-      progressBar.max = duration;
-      player.setVolume(volume);
+  loadingEl.classList.add('hidden');
+  duration = player.getDuration();
+  durationEl.textContent = formatTime(duration);
+  progressBar.max = duration;
+  player.setVolume(volume);
 
-      // Update progress
-      updateInterval = setInterval(function() {
-        if (player && player.getCurrentTime) {
-          var currentTime = player.getCurrentTime();
-          progressBar.value = currentTime;
-          currentTimeEl.textContent = formatTime(currentTime);
-        }
-      }, 500);
+  applyQuality(); // 🔥 Tambahan penting
+
+  updateInterval = setInterval(function() {
+    if (player && player.getCurrentTime) {
+      var currentTime = player.getCurrentTime();
+      progressBar.value = currentTime;
+      currentTimeEl.textContent = formatTime(currentTime);
     }
+  }, 500);
+}
 
     function onPlayerStateChange(event) {
       if (event.data === YT.PlayerState.PLAYING) {
@@ -1190,6 +1200,9 @@
     var qualityOptions = document.querySelectorAll('.quality-option');
     var currentQualityDisplay = document.getElementById('current-quality-display');
     var currentQuality = 'auto';
+    var videoId = 'O4SUhgS-bFc';
+
+    
 
     // Quality labels mapping
     var qualityLabels = {
