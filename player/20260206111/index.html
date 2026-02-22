@@ -1225,10 +1225,40 @@
 
     // Select quality
     qualityOptions.forEach(function(option) {
-      option.addEventListener('click', function(e) {
-        e.stopPropagation();
-        var quality = this.getAttribute('data-quality');
-        
+  option.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var quality = this.getAttribute('data-quality');
+
+    qualityOptions.forEach(function(opt) {
+      opt.classList.remove('active');
+    });
+
+    this.classList.add('active');
+
+    currentQuality = quality;
+    currentQualityDisplay.textContent = qualityLabels[quality];
+
+    if (player) {
+      var currentTime = player.getCurrentTime();
+      var wasPlaying = isPlaying;
+
+      // Reload video untuk memaksa kualitas
+      player.loadVideoById({
+        videoId: videoId,
+        startSeconds: currentTime
+      });
+
+      setTimeout(function() {
+        applyQuality();
+        if (!wasPlaying) {
+          player.pauseVideo();
+        }
+      }, 500);
+    }
+
+    settingsMenu.classList.remove('visible');
+  });
+});
         // Remove active class from all options
         qualityOptions.forEach(function(opt) {
           opt.classList.remove('active');
