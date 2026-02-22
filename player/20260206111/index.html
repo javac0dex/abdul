@@ -976,17 +976,18 @@
 
     // Format time
     function formatTime(seconds) {
-      if (!seconds || isNaN(seconds)) return '0:00';
-      var hours = Math.floor(seconds / 3600);
-      var minutes = Math.floor((seconds % 3600) / 60);
-      var secs = Math.floor(seconds % 60);
-      
-      if (hours > 0) {
-        return hours + ':' + String(minutes).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
-      }
-      return minutes + ':' + String(secs).padStart(2, '0');
-    }
-    function applyQuality() {
+  if (!seconds || isNaN(seconds)) return '0:00';
+  var hours = Math.floor(seconds / 3600);
+  var minutes = Math.floor((seconds % 3600) / 60);
+  var secs = Math.floor(seconds % 60);
+  
+  if (hours > 0) {
+    return hours + ':' + String(minutes).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+  }
+  return minutes + ':' + String(secs).padStart(2, '0');
+}
+
+function applyQuality() {
   if (!player) return;
 
   if (currentQuality === 'auto') {
@@ -1237,11 +1238,13 @@
     });
 
     // Select quality
-    qualityOptions.forEach(function(option) {
+qualityOptions.forEach(function(option) {
   option.addEventListener('click', function(e) {
     e.stopPropagation();
+
     var quality = this.getAttribute('data-quality');
 
+    // Reset active state
     qualityOptions.forEach(function(opt) {
       opt.classList.remove('active');
     });
@@ -1255,7 +1258,7 @@
       var currentTime = player.getCurrentTime();
       var wasPlaying = isPlaying;
 
-      // Reload video untuk memaksa kualitas
+      // Reload video untuk paksa kualitas
       player.loadVideoById({
         videoId: videoId,
         startSeconds: currentTime
@@ -1266,37 +1269,12 @@
         if (!wasPlaying) {
           player.pauseVideo();
         }
-      }, 500);
+      }, 600);
     }
 
     settingsMenu.classList.remove('visible');
   });
 });
-        // Remove active class from all options
-        qualityOptions.forEach(function(opt) {
-          opt.classList.remove('active');
-        });
-        
-        // Add active class to selected option
-        this.classList.add('active');
-        
-        // Update current quality
-        currentQuality = quality;
-        currentQualityDisplay.textContent = qualityLabels[quality];
-        
-        // Set video quality
-        if (player && player.setPlaybackQuality) {
-          if (quality === 'auto') {
-            player.setPlaybackQuality('default');
-          } else {
-            player.setPlaybackQuality(quality);
-          }
-        }
-        
-        // Close menu
-        settingsMenu.classList.remove('visible');
-      });
-    });
 
     // Close settings when clicking outside
     document.addEventListener('click', function(e) {
