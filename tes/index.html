@@ -1,2 +1,217 @@
-<!DOCTYPE html><!-- HIBIKUN REPOSITORY -->
-<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Liga Showroom Jeketi</title><script src="https://cdn.tailwindcss.com"></script><style>@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');body{font-family:'Plus Jakarta Sans',sans-serif;background-color:#f1f5f9;background-image:radial-gradient(#cbd5e1 .5px,transparent .5px);background-size:24px 24px}.glass-card{background:rgba(255,255,255,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.5)}.ranking-row-1{background:linear-gradient(to right,rgba(251,191,36,.08),transparent)}.ranking-row-2{background:linear-gradient(to right,rgba(148,163,184,.08),transparent)}.ranking-row-3{background:linear-gradient(to right,rgba(180,83,9,.08),transparent)}.loader{border:2px solid #f3f3f3;border-radius:50%;border-top:2px solid #334155;width:18px;height:18px;animation:spin .8s linear infinite}@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}.gradient-text{background:linear-gradient(135deg,#1e293b 0%,#475569 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}#event-banner-img{width:100%;height:auto;display:block}</style></head><body class="p-4 md:p-10 text-slate-900"><div id="capture-area" class="max-w-6xl mx-auto p-2"><header class="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6"><div class="flex items-center gap-4"><div class="p-1 bg-slate-800 rounded-2xl shadow-xl"><img class="w-10 h-10 rounded-xl" src="https://static.showroom-live.com/assets/img/logo_guidelines/icon.png?t=1667879554" alt="Logo"></div><div><h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Liga Showroom Jeketi</h1><a id="event-link" target="_blank" class="block group"><p class="text-slate-500 font-medium">Edisi: <span class="text-slate-800 font-bold">Japan TV Competition</span> | Event ID: <span class="text-slate-500">41907</span></p></a></div></div><div class="flex flex-wrap items-center justify-end gap-3"><div class="flex flex-col items-end gap-1"><button onclick="fetchData()" id="refresh-btn" class="group bg-slate-800 hover:bg-slate-900 text-white px-6 py-2.5 rounded-xl font-bold transition-all flex items-center gap-3 shadow-lg shadow-slate-200 active:scale-95"><span id="btn-text">Update Data</span><div id="btn-loader" class="loader hidden"></div><svg id="refresh-icon" class="w-4 h-4 text-slate-300 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg></button><div id="last-updated" class="text-[10px] uppercase tracking-widest font-bold text-slate-400"></div></div></div></header><div id="summary-container" class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10"><div class="h-32 bg-white/50 animate-pulse rounded-2xl border border-slate-200 flex items-center justify-center font-bold text-slate-400">Memuat...</div><div class="h-32 bg-white/50 animate-pulse rounded-2xl border border-slate-200 flex items-center justify-center font-bold text-slate-400">Memuat...</div><div class="h-32 bg-white/50 animate-pulse rounded-2xl border border-slate-200 flex items-center justify-center font-bold text-slate-400">Memuat...</div></div><div class="glass-card rounded-[2rem] shadow-2xl shadow-slate-300/30 overflow-hidden border border-white"><div class="px-8 py-6 border-b border-slate-100 flex justify-between items-center bg-white/60"><h2 class="font-bold text-lg text-slate-800 flex items-center gap-2 w-full">Klasemen <span id="total-count" class="text-xs bg-slate-800 text-white px-2.5 py-1 rounded-lg font-bold ml-auto"></span></h2></div><div class="overflow-x-auto"><table class="w-full text-left border-collapse"><thead class="bg-slate-50/80 text-slate-500 text-[11px] uppercase tracking-[0.2em]"><tr><th class="px-8 py-5 font-bold">Pos</th><th class="px-8 py-5 font-bold">Member</th><th class="px-8 py-5 font-bold text-right">Poin</th><th class="px-8 py-5 font-bold text-right">Selisih</th></tr></thead><tbody id="ranking-body" class="divide-y divide-slate-100"></tbody></table></div><div id="empty-state" class="hidden py-32 text-center"><div class="inline-flex p-4 rounded-full bg-slate-100 mb-4"><img class="w-8 h-8 opacity-40" src="https://static.showroom-live.com/assets/img/logo_guidelines/icon.png?t=1667879554" alt="Icon"></div><p class="text-slate-500 font-medium">Gagal memuat data klasemen.<br><span id="retry-status" class="text-sm text-slate-400 tracking-tight font-bold animate-pulse">Sedang mencoba ulang otomatis...</span></p></div></div><footer class="mt-12 mb-6 flex flex-col items-center gap-4 text-center"><p class="text-slate-400 text-xs font-bold uppercase tracking-[0.3em] leading-loose">HIBIKUN © 2026</p></footer></div><script>const targetUrl="https://www.showroom-live.com/api/events/41907/ranking?room_id=510011",proxyUrl=`https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;async function fetchData(){const e=document.getElementById("refresh-btn"),t=document.getElementById("btn-text"),n=document.getElementById("btn-loader"),r=document.getElementById("refresh-icon"),a=document.getElementById("empty-state");e.disabled=!0,t.innerText="Updating...",n.classList.remove("hidden"),r.classList.add("hidden");try{const o=await fetch(proxyUrl);if(!o.ok)throw new Error("Network error");const i=await o.json();if(!i.contents)throw new Error("Empty response");const s=JSON.parse(i.contents),l=document.getElementById("event-link");s.event&&s.event.event_url&&(l.href=s.event.event_url),renderDashboard(s),updateTimestamp(),a.classList.add("hidden")}catch(c){console.error("Fetch error, retrying...",c),a.classList.remove("hidden"),setTimeout(fetchData,2e3)}finally{e.disabled=!1,t.innerText="Update Data",n.classList.add("hidden"),r.classList.remove("hidden")}}function renderDashboard(e){const t=document.getElementById("ranking-body"),n=document.getElementById("summary-container"),r=document.getElementById("total-count"),a=e.ranking||[];r.innerText=`${a.length} MEMBER`,t.innerHTML="",n.innerHTML="",0!==a.length&&(n.classList.remove("hidden"),a.slice(0,3).forEach((e,t)=>{const r=[{border:"border-yellow-400",text:"text-yellow-700",label:"Peringkat 1"},{border:"border-slate-400",text:"text-slate-700",label:"Peringkat 2"},{border:"border-amber-700",text:"text-amber-800",label:"Peringkat 3"}][t],a=e.room.room_url_key?`https://www.showroom-live.com/r/${e.room.room_url_key}`:"#",o=document.createElement("div");o.className=`glass-card p-6 rounded-2xl shadow-sm border-l-4 border-0 ${r.border} relative overflow-hidden group hover:scale-[1.02] transition-transform duration-300`,e.room.image&&(o.style.backgroundImage=`linear-gradient(to right, rgba(255,255,255,0.95) 40%, rgba(255,255,255,0.4)), url(${e.room.image})`,o.style.backgroundSize="contain",o.style.backgroundRepeat="no-repeat",o.style.backgroundPosition="right"),o.innerHTML=`<a href="${a}" target="_blank" class="block h-full"><div class="absolute -left-4 -top-4 opacity-[0.03] group-hover:scale-110 transition-transform duration-500"><span class="text-8xl font-black ml-2 text-slate-900">${t+1}</span></div><div class="text-[10px] font-bold uppercase tracking-widest ${r.text} mb-2 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-current"></span>${r.label}</div><div class="text-sm font-bold text-slate-800 truncate pr-8 mb-1">${e.room.name}</div><div class="lg:text-2xl md:text-lg font-extrabold gradient-text mt-1">${new Intl.NumberFormat("id-ID").format(e.point)}<span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Poin</span></div></a>`,n.appendChild(o)}),a.forEach((e,n)=>{const r=document.createElement("tr"),o=e.rank<=3;r.className=`group hover:bg-slate-100/50 transition-all duration-200 ${o?"ranking-row-"+e.rank:""}`;let i=0;n>0&&(i=a[n-1].point-e.point);const s=e.room.room_url_key?`https://www.showroom-live.com/r/${e.room.room_url_key}`:"#";r.innerHTML=`<td class="px-8 py-5"><div class="flex items-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-lg ${getRankStyle(e.rank)} font-bold text-xs shadow-sm">${e.rank}</span></div></td><td class="px-8 py-5"><a href="${s}" target="_blank" class="flex items-center gap-4"><div class="relative"><img src="${e.room.image_square||"https://www.showroom-live.com/assets/img/v3/no_data.png"}" class="w-12 h-12 rounded-2xl object-cover border-2 border-white shadow-sm group-hover:shadow-md transition-shadow" alt="avatar" onerror="this.src='https://www.showroom-live.com/assets/img/v3/no_data.png'"></div><div><div class="font-bold text-slate-800 group-hover:text-slate-950 transition-colors line-clamp-1">${e.room.name}</div><div class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">ID: ${e.room.room_id}</div></div></a></td><td class="px-8 py-5 text-right font-mono font-bold text-slate-800">${new Intl.NumberFormat("id-ID").format(e.point)}</td><td class="px-8 py-5 text-right">${0===n?'<span class="text-[10px] font-bold text-slate-600 bg-slate-100 px-3 py-1 rounded-full border border-slate-200 uppercase tracking-widest">Puncak</span>':`<div class="flex flex-col items-end"><span class="text-[11px] font-bold text-slate-600 bg-slate-50 px-2 py-0.5 rounded-md flex items-center gap-1 border border-slate-100"><svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>${new Intl.NumberFormat("id-ID").format(i)}</span></div>`}</td>`,t.appendChild(r)}))}function getRankStyle(e){return 1===e?"bg-yellow-400 text-yellow-900":2===e?"bg-slate-300 text-slate-700":3===e?"bg-amber-700 text-white":"bg-slate-100 text-slate-500"}function updateTimestamp(){const e=new Date,t=e.toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit",second:"2-digit"}),n=e.toLocaleDateString("id-ID",{day:"numeric",month:"short"});document.getElementById("last-updated").innerText=`Update: ${n}, ${t}`}window.onload=fetchData;</script></body></html>
+<!DOCTYPE html>
+<!-- HIBIKUN REPOSITORY -->
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Liga Showroom Jeketi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f1f5f9;
+            background-image: radial-gradient(#cbd5e1 .5px, transparent .5px);
+            background-size: 24px 24px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, .85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, .5);
+        }
+
+        .ranking-row-1 {
+            background: linear-gradient(to right, rgba(251, 191, 36, .08), transparent);
+        }
+
+        .ranking-row-2 {
+            background: linear-gradient(to right, rgba(148, 163, 184, .08), transparent);
+        }
+
+        .ranking-row-3 {
+            background: linear-gradient(to right, rgba(180, 83, 9, .08), transparent);
+        }
+
+        .loader {
+            border: 2px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 2px solid #334155;
+            width: 18px;
+            height: 18px;
+            animation: spin .8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #event-banner-img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+
+<body class="p-4 md:p-10 text-slate-900">
+    <div id="capture-area" class="max-w-6xl mx-auto p-2">
+
+        <header class="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
+            <div class="flex items-center gap-4">
+                <div class="p-1 bg-slate-800 rounded-2xl shadow-xl">
+                    <img class="w-10 h-10 rounded-xl"
+                        src="https://static.showroom-live.com/assets/img/logo_guidelines/icon.png?t=1667879554"
+                        alt="Logo">
+                </div>
+                <div>
+                    <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Liga Showroom Jeketi</h1>
+                    <a id="event-link" target="_blank" class="block group">
+                        <p class="text-slate-500 font-medium">
+                            Edisi: <span class="text-slate-800 font-bold">Japan TV Competition</span> |
+                            Event ID: <span class="text-slate-500">41907</span>
+                        </p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-end gap-3">
+                <div class="flex flex-col items-end gap-1">
+                    <button onclick="fetchData()" id="refresh-btn"
+                        class="group bg-slate-800 hover:bg-slate-900 text-white px-6 py-2.5 rounded-xl font-bold transition-all flex items-center gap-3 shadow-lg shadow-slate-200 active:scale-95">
+                        <span id="btn-text">Update Data</span>
+                        <div id="btn-loader" class="loader hidden"></div>
+                        <svg id="refresh-icon"
+                            class="w-4 h-4 text-slate-300 group-hover:rotate-180 transition-transform duration-500"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                            </path>
+                        </svg>
+                    </button>
+                    <div id="last-updated"
+                        class="text-[10px] uppercase tracking-widest font-bold text-slate-400"></div>
+                </div>
+            </div>
+        </header>
+
+        <div id="summary-container" class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+            <div
+                class="h-32 bg-white/50 animate-pulse rounded-2xl border border-slate-200 flex items-center justify-center font-bold text-slate-400">
+                Memuat...
+            </div>
+            <div
+                class="h-32 bg-white/50 animate-pulse rounded-2xl border border-slate-200 flex items-center justify-center font-bold text-slate-400">
+                Memuat...
+            </div>
+            <div
+                class="h-32 bg-white/50 animate-pulse rounded-2xl border border-slate-200 flex items-center justify-center font-bold text-slate-400">
+                Memuat...
+            </div>
+        </div>
+
+        <div class="glass-card rounded-[2rem] shadow-2xl shadow-slate-300/30 overflow-hidden border border-white">
+            <div class="px-8 py-6 border-b border-slate-100 flex justify-between items-center bg-white/60">
+                <h2 class="font-bold text-lg text-slate-800 flex items-center gap-2 w-full">
+                    Klasemen
+                    <span id="total-count"
+                        class="text-xs bg-slate-800 text-white px-2.5 py-1 rounded-lg font-bold ml-auto"></span>
+                </h2>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-slate-50/80 text-slate-500 text-[11px] uppercase tracking-[0.2em]">
+                        <tr>
+                            <th class="px-8 py-5 font-bold">Pos</th>
+                            <th class="px-8 py-5 font-bold">Member</th>
+                            <th class="px-8 py-5 font-bold text-right">Poin</th>
+                            <th class="px-8 py-5 font-bold text-right">Selisih</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ranking-body" class="divide-y divide-slate-100"></tbody>
+                </table>
+            </div>
+
+            <div id="empty-state" class="hidden py-32 text-center">
+                <div class="inline-flex p-4 rounded-full bg-slate-100 mb-4">
+                    <img class="w-8 h-8 opacity-40"
+                        src="https://static.showroom-live.com/assets/img/logo_guidelines/icon.png?t=1667879554"
+                        alt="Icon">
+                </div>
+                <p class="text-slate-500 font-medium">
+                    Gagal memuat data klasemen.<br>
+                    <span id="retry-status" class="text-sm text-slate-400 tracking-tight font-bold animate-pulse">
+                        Sedang mencoba ulang otomatis...
+                    </span>
+                </p>
+            </div>
+        </div>
+
+        <footer class="mt-12 mb-6 flex flex-col items-center gap-4 text-center">
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-[0.3em] leading-loose">HIBIKUN © 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        const targetUrl = "https://www.showroom-live.com/api/events/41907/ranking?room_id=510011",
+            proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+
+        async function fetchData() {
+            const e = document.getElementById("refresh-btn"),
+                t = document.getElementById("btn-text"),
+                n = document.getElementById("btn-loader"),
+                r = document.getElementById("refresh-icon"),
+                a = document.getElementById("empty-state");
+
+            e.disabled = true;
+            t.innerText = "Updating...";
+            n.classList.remove("hidden");
+            r.classList.add("hidden");
+
+            try {
+                const o = await fetch(proxyUrl);
+                if (!o.ok) throw new Error("Network error");
+
+                const i = await o.json();
+                if (!i.contents) throw new Error("Empty response");
+
+                const s = JSON.parse(i.contents),
+                    l = document.getElementById("event-link");
+                if (s.event && s.event.event_url) l.href = s.event.event_url;
+
+                renderDashboard(s);
+                updateTimestamp();
+                a.classList.add("hidden");
+            } catch (c) {
+                console.error("Fetch error, retrying...", c);
+                a.classList.remove("hidden");
+                setTimeout(fetchData, 2000);
+            } finally {
+                e.disabled = false;
+                t.innerText = "Update Data";
+                n.classList.add("hidden");
+                r.classList.remove("hidden");
+            }
+        }
+
+        window.onload = fetchData;
+    </script>
+</body>
+
+</html>
